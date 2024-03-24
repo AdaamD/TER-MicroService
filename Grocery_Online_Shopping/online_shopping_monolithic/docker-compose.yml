@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  monolith-ter:
+    container_name: monolith-ter
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - OTEL_SERVICE_NAME=test-ter
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_TRACES_EXPORTER=jaeger
+      - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger:14250
+      - MONGODB_URI=mongodb://mongo:27017/amazon_demo
+    ports:
+      - "8001:8001"  # Modification du mapping de ports pour exposer le port 8001 du conteneur
+
+  jaeger:
+    container_name: jaeger-ter
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"
+      - "14250:14250"
+
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    ports:
+      - "27017:27017"
