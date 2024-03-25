@@ -27,7 +27,19 @@ services:
     ports:
       - "27017:27017"
 
-  prometheus-exporter:
-    image: prom/node-exporter:latest
+  prometheus:
+    image: prom/prometheus:latest
     ports:
-      - "9100:9100"
+      - "9090:9090"
+
+  grafana:
+    container_name: grafana-ter
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+    volumes:
+      - ./grafana:/etc/grafana/provisioning
